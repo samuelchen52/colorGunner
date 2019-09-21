@@ -43,6 +43,16 @@
         ctx.fillStyle = player.getColor();
         ctx.fillRect(px+2,py+2,size.sx-4, size.sy-4);
         
+        //clear
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,canv.width,canv.height);
+        for (var i = 0; i < enemyArr.length; i ++)
+        {
+            ctx.fillStyle = enemyArr[i].color;
+            let move = enemyArr[i].makeMove();
+            ctx.fillRect(move[0], move[1], move[2], move[3]);
+            enemyArr[i].move(move[0], move[1]);
+        }
     }
 
     function keyPush(evt) {
