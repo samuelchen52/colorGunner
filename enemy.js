@@ -42,6 +42,7 @@ class Enemy
 		this.variant = variant;
 		this.x = Math.floor(Math.random() * 500);
 		this.y = Math.floor(Math.random() * 500);
+		this.dead = false;
 	}
 
 	//return spaces it will be in 
