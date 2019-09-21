@@ -91,6 +91,7 @@
                 aliveEnemies.push(enemyArr[i]);
             }
         }
+        enemyArr = aliveEnemies;
 
         let bouncingBullets = [];
         for(let i =0; i<bulletArr.length; i++){
@@ -122,8 +123,6 @@
             bulletArr[i].grace -= 1;
         }
         bulletArr = bouncingBullets;
-
-
 
 
         //check enemy collide bullet
@@ -233,8 +232,7 @@
             //enemy constructor
             //constructor(difficulty, color, size, positionx, positiony, variant)
             let color = colors[Math.floor(Math.random() * colors.length)];
-            //let variant = variants[Math.floor(Math.random() * variants.length)];
-            let variant = "spaz";
+            let variant = variants[Math.floor(Math.random() * variants.length)];
             enemyArr.push(new Enemy(1, color, 30, 250, 250, variant));
         }
     }
