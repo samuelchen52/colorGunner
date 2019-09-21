@@ -127,12 +127,11 @@
             for (let p = 0; p < enemyArr.length; p ++)
             {
                 if (
-                    Math.min(bulletArr[i].x, enemyArr[p].x) > Math.max(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
-                ||  Math.min(bulletArr[i].y, enemyArr[p].y) > Math.max(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size)
+                    Math.max(bulletArr[i].x, enemyArr[p].x) <= Math.min(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
+                &&  Math.max(bulletArr[i].y, enemyArr[p].y) <= Math.min(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size)
                     )
                 {
-                    enemyArr[i].dead = true;
-                    console.log("SPLAT");
+                    enemyArr[p].dead = true;
                 }
             }
         }
