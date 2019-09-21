@@ -35,6 +35,10 @@
         "blue",
         "red"
     ]
+    const variants = [
+        "spaz",
+        "charge"
+    ]
 
     var player = new Player("white", 70, 70, 5);
     var px = 500;
@@ -43,7 +47,7 @@
     var vy = 0;
     
     var spawnTimer = 50;
-    spawnEnemies(10);
+    spawnEnemies(50);
 
     function game ()
     {
@@ -61,8 +65,9 @@
         for (var i = 0; i < enemyArr.length; i ++)
         {
             ctx.fillStyle = enemyArr[i].color;
-            let move = enemyArr[i].makeMove();
+            let move = enemyArr[i].makeMove(px, py);
             ctx.fillRect(move[0], move[1], move[2], move[3]);
+            console.log(move)
             enemyArr[i].move(move[0], move[1]);
         }
     }
@@ -121,7 +126,9 @@
             //enemy constructor
             //constructor(difficulty, color, size, positionx, positiony, variant)
             let color = colors[Math.floor(Math.random() * colors.length)];
-            enemyArr.push(new Enemy(10, color, 30, 250, 250, "something"));
+            //let variant = variants[Math.floor(Math.random() * variants.length)];
+            let variant = "spaz";
+            enemyArr.push(new Enemy(10, color, 30, 250, 250, variant));
         }
     }
 
