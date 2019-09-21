@@ -56,8 +56,8 @@ const variant =
 			{
 				dodge = true;
 				let bullet = bulletArr[p];
-				if (Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + 7, x + xmove + size) 
-	            && Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size))
+				if (Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + bullet.size, x + xmove + size) 
+	            && Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + bullet.size, y + ymove + size))
 				{
 					dodge = false;
 					break;

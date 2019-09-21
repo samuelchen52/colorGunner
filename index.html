@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Color Shooter</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">    
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,9 +25,15 @@
             </div>
         </div>
     </div>
-    <canvas id="gc" width="1000" height="500" ></canvas>
-    <div style="bottom:0">
-    </div>
+    <canvas id="gc" width="1200" height="500" ></canvas>
+   <footer style="text-align: center">
+        <strong>Instructions:</strong>
+        WASD: move |
+        1,2,3,4 : Color change Blue, Red, Green, Yellow 
+       | Q: Quick-cycle colors |
+        Mouse: Aim and shoot(The farther you point away from yourself, the faster the the bullet)
+        <br>
+   </footer>
     <script src="./player.js"></script>
     <script src="./enemy.js"></script>
     <script src="./bullet.js"></script>
@@ -38,6 +45,9 @@
         document.addEventListener("keyup", keyUp);
         canv.addEventListener("mousedown", shoot);
         game = setInterval(game,1000/60);
+        difficulty =1;
+        spawnEnemies(5);
+        setInterval(()=>{spawnEnemies(5)}, 10000)
         bounding = canv.getBoundingClientRect();
     }
 
@@ -58,7 +68,8 @@
 
     const variants = [
         "spaz",
-        "charge"
+        "charge",
+        "dodge"
     ]
 
     function addHighlight(color)
@@ -72,13 +83,11 @@
     }
 
     var player = new Player("yellow", 70, 70, 5);
-    var px = 500;
+    var px = 700;
     var py = 250;
     var vx = 0;
     var vy = 0;
     var keys ={"w":false, "a":false, "s":false, "d":false};
-    var spawnTimer = 50;
-    spawnEnemies(5);
 
     function game ()
     {   vMove();
@@ -125,14 +134,14 @@
             let move = bulletArr[i].makeMove();
 
             //x
-            if (move[0] + 7 > canv.width || move[0] < 0)
+            if (move[0] + bulletArr[i].size > canv.width || move[0] < 0)
             {
                 bulletArr[i].grace = 0;
                 bulletArr[i].tx *= -1;
                 bulletArr[i].bounce ++;
             }
             //y
-            if (move[1] + 7 > canv.height || move[1] < 0)
+            if (move[1] + bulletArr[i].size > canv.height || move[1] < 0)
             {
                 bulletArr[i].grace = 0;
                 bulletArr[i].ty *= -1;
@@ -141,9 +150,9 @@
             if (bulletArr[i].bounce < 5)
             {
                 ctx.fillStyle = "black";
-                ctx.fillRect(move[0], move[1], 7, 7);
+                ctx.fillRect(move[0], move[1], bulletArr[i].size, bulletArr[i].size);
                 ctx.fillStyle = bulletArr[i].getColor();
-                ctx.fillRect(move[0]+1, move[1]+1, 5, 5);
+                ctx.fillRect(move[0]+1, move[1]+1, 8, 8);
                 bulletArr[i].move(move[0],move[1]);
                 bouncingBullets.push(bulletArr[i]);
             }
@@ -158,8 +167,8 @@
             for (let p = 0; p < enemyArr.length; p ++)
             {
                 if (
-                    Math.max(bulletArr[i].x, enemyArr[p].x) <= Math.min(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
-                &&  Math.max(bulletArr[i].y, enemyArr[p].y) <= Math.min(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size) &&
+                    Math.max(bulletArr[i].x, enemyArr[p].x) <= Math.min(bulletArr[i].x + bulletArr[i].size, enemyArr[p].x + enemyArr[p].size) 
+                &&  Math.max(bulletArr[i].y, enemyArr[p].y) <= Math.min(bulletArr[i].y + bulletArr[i].size, enemyArr[p].y + enemyArr[p].size) &&
                     bulletArr[i].getColor() === enemyArr[p].color 
                     )
                 {
@@ -172,8 +181,8 @@
         for(let i = 0; i < bulletArr.length; i++){
             console.log(bulletArr[i]);
             if(
-                Math.max(bulletArr[i].x, px) <= Math.min(bulletArr[i].x + 7, px + player.sizex)
-                && Math.max(bulletArr[i].y, py) <= Math.min(bulletArr[i].y + 7, py + player.sizey) && bulletArr[i].grace < 1
+                Math.max(bulletArr[i].x, px) <= Math.min(bulletArr[i].x + bulletArr[i].size, px + player.sizex)
+                && Math.max(bulletArr[i].y, py) <= Math.min(bulletArr[i].y + bulletArr[i].size, py + player.sizey) && bulletArr[i].grace < 1
             ){
                 if(bulletArr[i].color === player.color)
                     player.grow();
@@ -191,8 +200,8 @@
 
         for(let i = 0; i < enemyArr.length; i++){
             if(
-                Math.max(enemyArr[i].x, px) <= Math.min(enemyArr[i].x + 7, px + player.sizex)
-                && Math.max(enemyArr[i].y, py) <= Math.min(enemyArr[i].y + 7, py + player.sizey)
+                Math.max(enemyArr[i].x, px) <= Math.min(enemyArr[i].x + enemyArr[i].size, px + player.sizex)
+                && Math.max(enemyArr[i].y, py) <= Math.min(enemyArr[i].y + enemyArr[i].size, py + player.sizey)
             ){
             clearInterval(game);
             ctx.fillStyle = "white";
@@ -274,10 +283,11 @@
             //enemy constructor
             //constructor(difficulty, color, size, positionx, positiony, variant)
             let color = colors[Math.floor(Math.random() * colors.length)];
-            //let variant = variants[Math.floor(Math.random() * variants.length)];
-            let variant = "dodge";
-            enemyArr.push(new Enemy(10, color, 30, 250, 250, variant));
+            let variant = variants[Math.floor(Math.random() * variants.length)];
+            enemyArr.push(new Enemy(difficulty, color, 30, 250, 250, variant));
         }
+        if(difficulty <10)
+        difficulty++;
     }
 
     function shoot(evt){

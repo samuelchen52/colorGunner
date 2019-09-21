@@ -8,6 +8,7 @@ class Bullet {
         this.ty = ty; //y coord movement
         this.grace = 60; //since bullet is originating from the center, there is a grace period where it doesnt count as touching player
         this.bounce = 0; // dies on 5th bounce
+        this.size = 10
     }
 
     getColor(){
