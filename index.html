@@ -9,6 +9,7 @@
     <canvas id="gc" width="1000" height="500"></canvas>
     
     <script src="./player.js"></script>
+    <script src="./enemy.js"></script>
     <script>
     window.onload=function() {
         canv=document.getElementById("gc");
@@ -20,7 +21,14 @@
     }
 
     var animationArr = []; //dying enemies
-    var bulvarArr = [];
+    var bulletArr = [];
+    var enemyArr = [];
+    const colors = [
+        "yellow",
+        "green",
+        "blue",
+        "red"
+    ]
 
     var player = new Player("white", 70, 70, 5);
     var px = 500;
@@ -29,7 +37,7 @@
     var vy = 0;
     
     var spawnTimer = 50;
-
+    spawnEnemies(10);
 
     function game ()
     {
@@ -44,9 +52,6 @@
         ctx.fillStyle = player.getColor();
         ctx.fillRect(px+2,py+2,size.sx-4, size.sy-4);
         
-        //clear
-        ctx.fillStyle = "black";
-        ctx.fillRect(0,0,canv.width,canv.height);
         for (var i = 0; i < enemyArr.length; i ++)
         {
             ctx.fillStyle = enemyArr[i].color;
@@ -101,6 +106,17 @@
                 player.setColor("yellow");
                 break;
             
+        }
+    }
+
+    function spawnEnemies(numEnemies)
+    {
+        for (var i = 0; i < numEnemies; i ++)
+        {
+            //enemy constructor
+            //constructor(difficulty, color, size, positionx, positiony, variant)
+            let color = colors[Math.floor(Math.random() * colors.length)];
+            enemyArr.push(new Enemy(10, color, 30, 250, 250, "something"));
         }
     }
 
