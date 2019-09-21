@@ -6,22 +6,24 @@
     <title>game</title>
 </head>
 <body>
-    <canvas id="gc" width="500" height="500"></canvas>
+    <canvas id="gc" width="1000" height="500"></canvas>
+    
+    <script src="./player.js"></script>
     <script>
     window.onload=function() {
         canv=document.getElementById("gc");
         ctx=canv.getContext("2d");
         document.addEventListener("keydown",keyPush);
+        document.addEventListener("keyup", keyUp);
         setInterval(game,1000/15);
     }
+
     var animationArr = []; //dying enemies
-    var enemyArr = [e1,e2];
-    var bulletArr = [];
+    var bulvarArr = [];
 
-
-    var px = 250;
+    var player = new Player("white", 70, 70, 5);
+    var px = 500;
     var py = 250;
-
     var vx = 0;
     var vy = 0;
     
@@ -30,24 +32,67 @@
 
     function game ()
     {
-
+        px += (vx * player.getSpeed());
+        py += (vy * player.getSpeed());
+        ctx.fillStyle="black";
+        ctx.fillRect(0,0,canv.width,canv.height);
+        
+        let size = player.getSize();
+        ctx.fillStyle = "white";
+        ctx.fillRect(px, py, size.sx, size.sy);
+        ctx.fillStyle = player.getColor();
+        ctx.fillRect(px+2,py+2,size.sx-4, size.sy-4);
+        
     }
+
     function keyPush(evt) {
-        switch(evt.keyCode) {
-            case 37:
-                xv=-1;yv=0;
+        console.log(evt.key)
+        switch(evt.key) {
+            case 'a':
+                vx = -1;
                 break;
-            case 38:
-                xv=0;yv=-1;
+            case 's':
+                vy = 1;
                 break;
-            case 39:
-                xv=1;yv=0;
+            case 'd':
+                vx = 1;
                 break;
-            case 40:
-                xv=0;yv=1;
+            case 'w':
+                vy = -1;
                 break;
         }
     }
+
+    function keyUp(evt){
+        switch(evt.key) {
+            case 'a':
+                vx=0;
+                break;
+            case 'w':
+                vy=0;
+                break;
+            case 'd':
+                vx=0;
+                break;
+            case 's':
+                vy=0;
+                break;
+            case '1':
+                player.setColor("blue");
+                break;
+            case '2':
+                player.setColor("red");
+                break;
+            case '3':
+                player.setColor("green");
+                break;
+            case '4':
+                player.setColor("yellow");
+                break;
+            
+        }
+    }
+
     </script>
 
 
