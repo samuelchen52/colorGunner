@@ -47,7 +47,7 @@
     var vy = 0;
     
     var spawnTimer = 50;
-    spawnEnemies(50);
+    //spawnEnemies(5);
 
     function game ()
     {
@@ -62,13 +62,22 @@
         ctx.fillStyle = player.getColor();
         ctx.fillRect(px+2,py+2,size.sx-4, size.sy-4);
         
-        for (var i = 0; i < enemyArr.length; i ++)
+        for (let i = 0; i < enemyArr.length; i ++)
         {
             ctx.fillStyle = enemyArr[i].color;
             let move = enemyArr[i].makeMove(px, py);
             ctx.fillRect(move[0], move[1], move[2], move[3]);
             console.log(move)
             enemyArr[i].move(move[0], move[1]);
+        }
+
+        for(let i =0; i<bulletArr.length; i++){
+            ctx.fillStyle = "white";
+            ctx.fillRect(bulletArr[i].currentx, bulletArr[i].currenty, 7, 7);
+            ctx.fillStyle = bulletArr[i].getColor();
+            ctx.fillRect(bulletArr[i].currentx+1, bulletArr[i].currenty+1, 5, 5);
+            bulletArr[i].currentx+=bulletArr[i].tx;
+            bulletArr[i].currenty+=bulletArr[i].ty;
         }
     }
 
@@ -133,10 +142,21 @@
     }
 
     function shoot(evt){
+        if(player.sizex > 7){
         let bounding = canv.getBoundingClientRect();
+        //mouse position
         mx = evt.clientX - bounding.left;
         my = evt.clientY - bounding.top;
-        
+        //bullet origin position (Player center);
+        originx = px + player.sizex / 2;
+        originy = py + player.sizey / 2;
+        a = mx - originx;
+        b = my - originy;
+    
+        bullet = new Bullet(player.getColor(),originx,originy, a/15, b/15);
+        player.shrink();
+        bulletArr.push(bullet);
+    }
     }
     </script>
 

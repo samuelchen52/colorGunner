@@ -18,7 +18,16 @@ class Player{
     }
 
     shrink(){
-
+        this.sizex -= 1;
+        this.sizey -= 1;
+        if (this.sizex <7){
+            this.sizex = 7;
+            this.sizey =7;
+        }
+        this.speed = 700 / this.sizex;
+        if(this.speed >20)
+            this.speed = 20;
+        
     }
 
     shoot(px, py){
