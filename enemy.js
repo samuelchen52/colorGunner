@@ -3,7 +3,7 @@ const variant =
 	//fast but unreliable
 	spaz : function(x, y, playerx, playery, difficulty)
 	{
-		let velocity = 2 * difficulty;
+		let velocity = difficulty;
 		let threshold = (difficulty * .1) >= 1 ? .7 : (difficulty * .10); 
 		let xsign = Math.random() > threshold ? -1 : 1;
 		let ysign = Math.random() > threshold ? -1 : 1;
@@ -23,7 +23,7 @@ const variant =
 	//skilled
 	dodge: function()
 	{
-		
+
 		//harry does this
 	}
 

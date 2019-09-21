@@ -23,7 +23,7 @@
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
         canv.addEventListener("mousedown", shoot);
-        setInterval(game,1000/15);
+        setInterval(game,1000/500);
     }
 
     var animationArr = []; //dying enemies
@@ -152,10 +152,26 @@
         a = mx - originx;
         b = my - originy;
     
-        bullet = new Bullet(player.getColor(),originx,originy, a/15, b/15);
+        bullet = new Bullet(player.getColor(), originx, originy, a/15, b/15);
         player.shrink();
         bulletArr.push(bullet);
     }
+
+
+
+
+
+    // COLLISIONS
+    ////////////////////////////////////////////////////////
+    function collision(positionx1, positiony1, velocityx1, velocityy1, positionx2, positiony2, velocityx2, velocityy2)
+    {
+
+    }
+    function collisionEnemyWithWall()
+    {
+
+    }
+
     }
     </script>
 
