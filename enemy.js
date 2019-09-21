@@ -1,3 +1,6 @@
+const directions = [[-1, 0], [-1, -1], [0, 1], [1,1], [1,0], [1,-1], [0,-1], [-1,-1]]
+
+
 const variant = 
 {
 	//fast but unreliable
@@ -21,10 +24,49 @@ const variant =
 	},
 
 	//skilled
-	dodge: function()
+	dodge: function(x, y, playerx, playery, difficulty, bulletArr, size)
 	{
+		let velocity = difficulty;
+		let xmove = x < playerx ? velocity : -1 * velocity;
+		let ymove = y < playery ? velocity : -1 * velocity;
+		let dodge = false;
+		let homein = true;
 
-		//harry does this
+		for (let i = 0; i < bulletArr.length; i ++)
+		{
+			let bullet = bulletArr[i];
+			if (!(Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + 7, x + xmove + size) 
+	        &&  Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size)))
+			{
+				homein = false;
+			}
+		}
+		if (homein)
+		{
+			return [xmove, ymove];
+		}
+
+
+		for (let i = 0; i < 8 && !dodge; i ++)
+		{
+			xmove = directions[i][0] * velocity;
+			ymove = directions[i][1] * velocity;
+			for (let p = 0; p < bulletArr.length; p ++)
+			{
+				let bullet = bulletArr[p];
+				if (Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + 7, x + xmove + size) 
+	               &&  Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size))
+				{
+					dodge = false;
+					break;
+				}
+				else
+				{
+					dodge = true;
+				}
+			}
+		}
+			return [xmove, ymove];
 	}
 
 }
@@ -48,7 +90,7 @@ class Enemy
 	//return spaces it will be in 
 	makeMove(playerx, playery)
 	{
-		let move = variant[this.variant](this.x, this.y, playerx, playery, this.difficulty);
+		let move = variant[this.variant](this.x, this.y, playerx, playery, this.difficulty, bulletArr, this.size);
 		//return arguments to ctx.fillstyle
 		//posx, posy, sizex, sizey
 		return [this.x + move[0], this.y + move[1], this.size, this.size];
