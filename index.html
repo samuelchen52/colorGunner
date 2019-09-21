@@ -12,6 +12,18 @@
 </head>
 
 <body>
+    <div class = "center">
+        <div>
+            <div class = "color" id = "blue" style = "background-color : blue;">
+            </div>
+            <div class = "color" id = "red" style = "background-color : red;">
+            </div>
+            <div class = "color" id = "green" style = "background-color : green;">
+            </div>
+            <div class = "color highlight" id = "yellow" style = "background-color : yellow;">
+            </div>
+        </div>
+    </div>
     <canvas id="gc" width="1000" height="500" ></canvas>
     <div style="bottom:0">
     </div>
@@ -34,15 +46,30 @@
     var bulletArr = [];
     var enemyArr = [];
     const colors = [
-        "yellow",
-        "green",
         "blue",
-        "red"
+        "red",
+        "green",
+        "yellow"
     ]
+    colors.blue = 0;
+    colors.red = 1;
+    colors.green = 2;
+    colors.yellow = 3;
+
     const variants = [
         "spaz",
         "charge"
     ]
+
+    function addHighlight(color)
+    {
+        document.getElementById("red").classList.remove("highlight");
+        document.getElementById("yellow").classList.remove("highlight");
+        document.getElementById("blue").classList.remove("highlight");
+        document.getElementById("green").classList.remove("highlight");
+
+        document.getElementById(color).classList.add("highlight");
+    }
 
     var player = new Player("yellow", 70, 70, 5);
     var px = 500;
@@ -78,7 +105,7 @@
             if (!enemyArr[i].dead)
             {
                 ctx.fillStyle = enemyArr[i].color;
-                let move = enemyArr[i].makeMove(px + player.sizex / 2, py + player.sizey / 2);
+                let move = enemyArr[i].makeMove(px + player.sizex / 2, py + player.sizey / 2, bulletArr);
                 move[0] = move[0] + move[2] > canv.width ? canv.width - move[2] : move[0];
                 move[0] = move[0] < 0 ? 0 : move[0];
 
@@ -211,19 +238,34 @@
                 break;
             case '1':
                 player.setColor("blue");
+                addHighlight("blue");
                 break;
             case '2':
                 player.setColor("red");
+                addHighlight("red");
                 break;
             case '3':
                 player.setColor("green");
+                addHighlight("green");
                 break;
             case '4':
                 player.setColor("yellow");
+                addHighlight("yellow");
                 break;
+            case 'e':
+                let index = colors[player.getColor()] + 1;
+                index = index === colors.length ? 0 : index;
+                player.setColor(colors[index]);
+                addHighlight(colors[index]);
+                break;
+            case 'q':
+                let index2 = colors[player.getColor()] - 1;
+                index2 = index2 === -1 ? colors.length - 1 : index2;
+                player.setColor(colors[index2]);
+                addHighlight(colors[index2]);
             
         }
-    }
+    };
 
     function spawnEnemies(numEnemies)
     {
@@ -232,8 +274,9 @@
             //enemy constructor
             //constructor(difficulty, color, size, positionx, positiony, variant)
             let color = colors[Math.floor(Math.random() * colors.length)];
-            let variant = variants[Math.floor(Math.random() * variants.length)];
-            enemyArr.push(new Enemy(1, color, 30, 250, 250, variant));
+            //let variant = variants[Math.floor(Math.random() * variants.length)];
+            let variant = "dodge";
+            enemyArr.push(new Enemy(10, color, 30, 250, 250, variant));
         }
     }
 
