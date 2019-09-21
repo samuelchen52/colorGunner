@@ -30,10 +30,6 @@ class Player{
         
     }
 
-    shoot(px, py){
-        
-    }
-
     getSpeed(){
         return this.speed;
     }

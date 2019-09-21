@@ -23,9 +23,11 @@
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
         canv.addEventListener("mousedown", shoot);
-        setInterval(game,1000/15);
+        setInterval(game,1000/60);
+        bounding = canv.getBoundingClientRect();
     }
 
+    
     var animationArr = []; //dying enemies
     var bulletArr = [];
     var enemyArr = [];
@@ -45,12 +47,12 @@
     var py = 250;
     var vx = 0;
     var vy = 0;
-    
+    var keys ={"w":false, "a":false, "s":false, "d":false};
     var spawnTimer = 50;
-    spawnEnemies(5);
+    //spawnEnemies(5);
 
     function game ()
-    {
+    {   vMove();
         px += (vx * player.getSpeed());
         py += (vy * player.getSpeed());
         ctx.fillStyle="black";
@@ -81,18 +83,19 @@
     }
 
     function keyPush(evt) {
+        console.log(evt.key)
         switch(evt.key) {
             case 'a':
-                vx = -1;
+                keys.a = true;
                 break;
             case 's':
-                vy = 1;
+                keys.s = true;
                 break;
             case 'd':
-                vx = 1;
+                keys.d = true;
                 break;
             case 'w':
-                vy = -1;
+                keys.w = true;
                 break;
         }
     }
@@ -100,16 +103,20 @@
     function keyUp(evt){
         switch(evt.key) {
             case 'a':
+                keys.a = false;
                 vx=0;
                 break;
             case 'w':
+                keys.w = false;
                 vy=0;
                 break;
             case 'd':
+                keys.d =false;
                 vx=0;
                 break;
             case 's':
-                vy=0;
+                keys.s = false;
+                vy = 0;
                 break;
             case '1':
                 player.setColor("blue");
@@ -142,7 +149,6 @@
 
     function shoot(evt){
         if(player.sizex > 7){
-        let bounding = canv.getBoundingClientRect();
         //mouse position
         mx = evt.clientX - bounding.left;
         my = evt.clientY - bounding.top;
@@ -151,11 +157,27 @@
         originy = py + player.sizey / 2;
         a = mx - originx;
         b = my - originy;
-    
-        bullet = new Bullet(player.getColor(),originx,originy, a/15, b/15);
+        bullet = new Bullet(player.getColor(),originx,originy, a/50, b/50);
         player.shrink();
         bulletArr.push(bullet);
     }
+    }
+
+    function vMove(){
+        if(keys.a && keys.d)
+            vx = 0;
+        else if(keys.a)
+            vx = -1;
+        else if(keys.d)
+            vx = 1
+        if(keys.w && keys.s)
+            vy =0;
+        else if(keys.w)
+            vy = -1;
+        else if(keys.s)
+            vy = 1; 
+        
+
     }
     </script>
 
