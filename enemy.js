@@ -19,10 +19,11 @@ const variant =
 		let ymove =  (y < playery ? velocity : -1 * velocity);
 		return [xmove, ymove];
 	},
-	
+
 	//skilled
 	dodge: function()
 	{
+		
 		//harry does this
 	}
 

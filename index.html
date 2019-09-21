@@ -65,7 +65,7 @@
         for (let i = 0; i < enemyArr.length; i ++)
         {
             ctx.fillStyle = enemyArr[i].color;
-            let move = enemyArr[i].makeMove(px, py);
+            let move = enemyArr[i].makeMove(px + player.sizex / 2, py + player.sizey / 2);
             ctx.fillRect(move[0], move[1], move[2], move[3]);
             console.log(move)
             enemyArr[i].move(move[0], move[1]);
