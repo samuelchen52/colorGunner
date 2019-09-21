@@ -27,12 +27,12 @@
         </div>
     </div>
     <canvas id="gc" width="1200" height="500" ></canvas>
-   <footer style="text-align: center">
+   <footer style="text-align: center; font-size: 14px;">
         <strong>Instructions:</strong>
         WASD: move |
         1,2,3,4 : Color change Blue, Red, Green, Yellow 
        | Q&E: Quick-cycle colors |
-        Mouse: Aim and shoot(The farther you point away from yourself, the faster the the bullet)
+        Mouse: Aim and shoot(The farther you point away from yourself, the faster the the bullet) | R: Restart Game
         <br>
    </footer>
     <script src="./player.js"></script>
@@ -45,6 +45,7 @@
         ctx=canv.getContext("2d");
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
+        document.addEventListener("keyup",(evt) => {if(evt.key === 'r')window.location.reload()});
         canv.addEventListener("mousedown", shoot);
         game = setInterval(game,1000/60);
         difficulty = 1;
@@ -80,7 +81,6 @@
         document.getElementById("yellow").classList.remove("highlight");
         document.getElementById("blue").classList.remove("highlight");
         document.getElementById("green").classList.remove("highlight");
-
         document.getElementById(color).classList.add("highlight");
     }
 
