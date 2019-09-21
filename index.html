@@ -13,6 +13,8 @@
 
 <body>
     <canvas id="gc" width="1000" height="500" ></canvas>
+    <div style="bottom:0">
+    </div>
     <script src="./player.js"></script>
     <script src="./enemy.js"></script>
     <script src="./bullet.js"></script>
@@ -23,7 +25,7 @@
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
         canv.addEventListener("mousedown", shoot);
-        setInterval(game,1000/60);
+        game = setInterval(game,1000/60);
         bounding = canv.getBoundingClientRect();
     }
 
@@ -42,7 +44,7 @@
         "charge"
     ]
 
-    var player = new Player("white", 70, 70, 5);
+    var player = new Player("yellow", 70, 70, 5);
     var px = 500;
     var py = 250;
     var vx = 0;
@@ -97,24 +99,27 @@
             //x
             if (move[0] + 7 > canv.width || move[0] < 0)
             {
+                bulletArr[i].grace = 0;
                 bulletArr[i].tx *= -1;
                 bulletArr[i].bounce ++;
             }
             //y
             if (move[1] + 7 > canv.height || move[1] < 0)
             {
+                bulletArr[i].grace = 0;
                 bulletArr[i].ty *= -1;
                 bulletArr[i].bounce ++;
             }
             if (bulletArr[i].bounce < 5)
             {
-                ctx.fillStyle = "white";
+                ctx.fillStyle = "black";
                 ctx.fillRect(move[0], move[1], 7, 7);
                 ctx.fillStyle = bulletArr[i].getColor();
                 ctx.fillRect(move[0]+1, move[1]+1, 5, 5);
                 bulletArr[i].move(move[0],move[1]);
                 bouncingBullets.push(bulletArr[i]);
             }
+            bulletArr[i].grace -= 1;
         }
         bulletArr = bouncingBullets;
 
@@ -127,14 +132,45 @@
             for (let p = 0; p < enemyArr.length; p ++)
             {
                 if (
-                    Math.min(bulletArr[i].x, enemyArr[p].x) <= Math.max(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
-                ||  Math.min(bulletArr[i].y, enemyArr[p].y) <= Math.max(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size)
+                    Math.max(bulletArr[i].x, enemyArr[p].x) <= Math.min(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
+                &&  Math.max(bulletArr[i].y, enemyArr[p].y) <= Math.min(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size) &&
+                    bulletArr[i].getColor() === enemyArr[p].color 
                     )
                 {
-                    enemyArr[i].dead = true;
-                    console.log("SPLAT");
+                    enemyArr[p].dead = true;
                 }
             }
+        }
+        
+        bouncingBullets = []
+        for(let i = 0; i < bulletArr.length; i++){
+            console.log(bulletArr[i]);
+            if(
+                Math.max(bulletArr[i].x, px) <= Math.min(bulletArr[i].x + 7, px + player.sizex)
+                && Math.max(bulletArr[i].y, py) <= Math.min(bulletArr[i].y + 7, py + player.sizey) && bulletArr[i].grace < 1
+            ){
+                if(bulletArr[i].color === player.color)
+                    player.grow();
+                else{
+                    clearInterval(game);
+                    ctx.fillStyle = "white";
+                    ctx.fillRect(px-1, py-1, player.sizex+2, player.sizey+2);
+                }
+            }
+            else{
+                bouncingBullets.push(bulletArr[i])
+            }
+        }
+        bulletArr = bouncingBullets;
+
+        for(let i = 0; i < enemyArr.length; i++){
+            if(
+                Math.max(enemyArr[i].x, px) <= Math.min(enemyArr[i].x + 7, px + player.sizex)
+                && Math.max(enemyArr[i].y, py) <= Math.min(enemyArr[i].y + 7, py + player.sizey)
+            ){
+            clearInterval(game);
+            ctx.fillStyle = "white";
+            ctx.fillRect(px-1, py-1, player.sizex+2, player.sizey+2);}
         }
     }
 
@@ -236,11 +272,6 @@ function vMove(){
         
 
     }
-
-
-    // COLLISIONS
-    ////////////////////////////////////////////////////////
-    
 
     </script>
 

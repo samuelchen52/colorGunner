@@ -30,6 +30,13 @@ class Player{
         
     }
 
+    grow(){
+        this.sizex +=1;
+        this.sizey +=1;
+        this.speed = 700 / this.sizex;
+        if(this.speed >20)
+        this.speed = 20;
+    }
     getSpeed(){
         return this.speed;
     }
