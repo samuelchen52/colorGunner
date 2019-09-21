@@ -15,6 +15,7 @@
         ctx=canv.getContext("2d");
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
+        canv.addEventListener("onclick", shoot);
         setInterval(game,1000/15);
     }
 
