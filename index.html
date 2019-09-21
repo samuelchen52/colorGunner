@@ -23,6 +23,7 @@
             </div>
             <div class = "color highlight" id = "yellow" style = "background-color : yellow;">
             </div>
+            <div id="level" style=" float:right; margin-left:20px; margin-top:20px;"><h3>Level: 1</h3></div>
         </div>
     </div>
     <canvas id="gc" width="1200" height="500" ></canvas>
@@ -30,7 +31,7 @@
         <strong>Instructions:</strong>
         WASD: move |
         1,2,3,4 : Color change Blue, Red, Green, Yellow 
-       | Q: Quick-cycle colors |
+       | Q&E: Quick-cycle colors |
         Mouse: Aim and shoot(The farther you point away from yourself, the faster the the bullet)
         <br>
    </footer>
@@ -38,6 +39,7 @@
     <script src="./enemy.js"></script>
     <script src="./bullet.js"></script>
     <script>
+
     window.onload=function() {
         canv=document.getElementById("gc");
         ctx=canv.getContext("2d");
@@ -45,7 +47,7 @@
         document.addEventListener("keyup", keyUp);
         canv.addEventListener("mousedown", shoot);
         game = setInterval(game,1000/60);
-        difficulty =1;
+        difficulty = 1;
         spawnEnemies(5);
         setInterval(()=>{spawnEnemies(5)}, 10000)
         bounding = canv.getBoundingClientRect();
@@ -179,7 +181,6 @@
         
         bouncingBullets = []
         for(let i = 0; i < bulletArr.length; i++){
-            console.log(bulletArr[i]);
             if(
                 Math.max(bulletArr[i].x, px) <= Math.min(bulletArr[i].x + bulletArr[i].size, px + player.sizex)
                 && Math.max(bulletArr[i].y, py) <= Math.min(bulletArr[i].y + bulletArr[i].size, py + player.sizey) && bulletArr[i].grace < 1
@@ -288,6 +289,7 @@
         }
         if(difficulty <10)
         difficulty++;
+        //document.getElementById("level").innerHTML("Level: "+difficulty);
     }
 
     function shoot(evt){
