@@ -29,41 +29,43 @@ const variant =
 		let velocity = difficulty;
 		let xmove = x < playerx ? velocity : -1 * velocity;
 		let ymove = y < playery ? velocity : -1 * velocity;
-		let dodge = false;
 		let homein = true;
 
 		for (let i = 0; i < bulletArr.length; i ++)
 		{
 			let bullet = bulletArr[i];
-			if (!(Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + 7, x + xmove + size) 
-	        &&  Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size)))
+			if (Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + 7, x + xmove + size) 
+	        &&  Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size))
 			{
 				homein = false;
 			}
 		}
 		if (homein)
 		{
-			return [xmove, ymove];
+			return [xmove * .1, ymove * .1];
 		}
 
 
-		for (let i = 0; i < 8 && !dodge; i ++)
+		for (let i = 0; i < 8; i ++)
 		{
 			xmove = directions[i][0] * velocity;
 			ymove = directions[i][1] * velocity;
+			dodge = true;
+
 			for (let p = 0; p < bulletArr.length; p ++)
 			{
+				dodge = true;
 				let bullet = bulletArr[p];
 				if (Math.max(bullet.x + bullet.tx, x + xmove) <= Math.min(bullet.x + bullet.tx + 7, x + xmove + size) 
-	               &&  Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size))
+	            && Math.max(bullet.y + bullet.ty, y + ymove) <= Math.min(bullet.y + bullet.ty + 7, y + ymove + size))
 				{
 					dodge = false;
 					break;
 				}
-				else
-				{
-					dodge = true;
-				}
+			}
+			if (dodge)
+			{
+				return [xmove, ymove];
 			}
 		}
 			return [xmove, ymove];
