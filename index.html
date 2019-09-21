@@ -2,21 +2,27 @@
 
 <!DOCTYPE html>
 <html>
+<html lang="en">
 <head>
-    <title>game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Color Shooter</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <canvas id="gc" width="1000" height="500"></canvas>
-    
+    <canvas id="gc" width="1000" height="500" ></canvas>
     <script src="./player.js"></script>
     <script src="./enemy.js"></script>
+    <script src="./bullet.js"></script>
     <script>
     window.onload=function() {
         canv=document.getElementById("gc");
         ctx=canv.getContext("2d");
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
-        canv.addEventListener("onclick", shoot);
+        canv.addEventListener("click", shoot);
         setInterval(game,1000/15);
     }
 
@@ -62,7 +68,6 @@
     }
 
     function keyPush(evt) {
-        console.log(evt.key)
         switch(evt.key) {
             case 'a':
                 vx = -1;
@@ -120,9 +125,14 @@
         }
     }
 
+    function shoot(evt){
+        let bounding = canv.getBoundingClientRect();
+        mx = evt.clientX - bounding.left;
+        my = evt.clientY - bounding.top;
+        
+    }
     </script>
 
 
 </body>
 </html>
-
