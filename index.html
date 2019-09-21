@@ -1,0 +1,56 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>game</title>
+</head>
+<body>
+    <canvas id="gc" width="500" height="500"></canvas>
+    <script>
+    window.onload=function() {
+        canv=document.getElementById("gc");
+        ctx=canv.getContext("2d");
+        document.addEventListener("keydown",keyPush);
+        setInterval(game,1000/15);
+    }
+    var animationArr = []; //dying enemies
+    var enemyArr = [e1,e2];
+    var bulletArr = [];
+
+
+    var px = 250;
+    var py = 250;
+
+    var vx = 0;
+    var vy = 0;
+    
+    var spawnTimer = 50;
+
+
+    function game ()
+    {
+
+    }
+    function keyPush(evt) {
+        switch(evt.keyCode) {
+            case 37:
+                xv=-1;yv=0;
+                break;
+            case 38:
+                xv=0;yv=-1;
+                break;
+            case 39:
+                xv=1;yv=0;
+                break;
+            case 40:
+                xv=0;yv=1;
+                break;
+        }
+    }
+    </script>
+
+
+</body>
+</html>
+
