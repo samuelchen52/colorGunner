@@ -2,8 +2,8 @@ class Bullet {
 
     constructor(color, currentx, currenty,tx, ty){
         this.color = color;
-        this.currentx = currentx;
-        this.currenty = currenty;
+        this.x = currentx;
+        this.y = currenty;
         this.tx = tx; //x coord movement
         this.ty = ty; //y coord movement
         this.grace = true; //since bullet is originating from the center, there is a grace period where it doesnt count as touching player
@@ -15,11 +15,11 @@ class Bullet {
     }
 
     makeMove(){
-        return [this.currentx+this.tx, this.currenty+this.ty];
+        return [this.x+this.tx, this.y+this.ty];
     }
 
     move(x,y){
-        this.currentx = x;
-        this.currenty = y;
+        this.x = x;
+        this.y = y;
     }
 }

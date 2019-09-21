@@ -49,12 +49,18 @@
     var vy = 0;
     var keys ={"w":false, "a":false, "s":false, "d":false};
     var spawnTimer = 50;
-    //spawnEnemies(5);
+    spawnEnemies(5);
 
     function game ()
     {   vMove();
         px += (vx * player.getSpeed());
+        px = px + player.sizex > canv.width ? canv.width - player.sizex : px;
+        px = px < 0 ? 0 : px;
+
         py += (vy * player.getSpeed());
+        py = py + player.sizey > canv.height ? canv.height - player.sizey : py;
+        py = py < 0 ? 0 : py;
+
         ctx.fillStyle="black";
         ctx.fillRect(0,0,canv.width,canv.height);
         
@@ -64,21 +70,71 @@
         ctx.fillStyle = player.getColor();
         ctx.fillRect(px+2,py+2,size.sx-4, size.sy-4);
         
+        let aliveEnemies = [];
         for (let i = 0; i < enemyArr.length; i ++)
         {
-            ctx.fillStyle = enemyArr[i].color;
-            let move = enemyArr[i].makeMove(px + player.sizex / 2, py + player.sizey / 2);
-            ctx.fillRect(move[0], move[1], move[2], move[3]);
-            enemyArr[i].move(move[0], move[1]);
+            if (!enemyArr[i].dead)
+            {
+                ctx.fillStyle = enemyArr[i].color;
+                let move = enemyArr[i].makeMove(px + player.sizex / 2, py + player.sizey / 2);
+                move[0] = move[0] + move[2] > canv.width ? canv.width - move[2] : move[0];
+                move[0] = move[0] < 0 ? 0 : move[0];
+
+                move[1] = move[1] + move[3] > canv.height ? canv.height - move[3] : move[1];
+                move[1] = move[1] < 0 ? 0 : move[1];
+
+                ctx.fillRect(move[0], move[1], move[2], move[3]);
+                enemyArr[i].move(move[0], move[1]);
+
+                aliveEnemies.push(enemyArr[i]);
+            }
         }
 
+        let bouncingBullets = [];
         for(let i =0; i<bulletArr.length; i++){
-            ctx.fillStyle = "white";
-            ctx.fillRect(bulletArr[i].currentx, bulletArr[i].currenty, 7, 7);
-            ctx.fillStyle = bulletArr[i].getColor();
-            ctx.fillRect(bulletArr[i].currentx+1, bulletArr[i].currenty+1, 5, 5);
             let move = bulletArr[i].makeMove();
-            bulletArr[i].move(move[0],move[1]);
+
+            //x
+            if (move[0] + 7 > canv.width || move[0] < 0)
+            {
+                bulletArr[i].tx *= -1;
+                bulletArr[i].bounce ++;
+            }
+            //y
+            if (move[1] + 7 > canv.height || move[1] < 0)
+            {
+                bulletArr[i].ty *= -1;
+                bulletArr[i].bounce ++;
+            }
+            if (bulletArr[i].bounce < 5)
+            {
+                ctx.fillStyle = "white";
+                ctx.fillRect(move[0], move[1], 7, 7);
+                ctx.fillStyle = bulletArr[i].getColor();
+                ctx.fillRect(move[0]+1, move[1]+1, 5, 5);
+                bulletArr[i].move(move[0],move[1]);
+                bouncingBullets.push(bulletArr[i]);
+            }
+        }
+        bulletArr = bouncingBullets;
+
+
+
+
+        //check enemy collide bullet
+        for (let i = 0; i < bulletArr.length; i ++)
+        {
+            for (let p = 0; p < enemyArr.length; p ++)
+            {
+                if (
+                    Math.min(bulletArr[i].x, enemyArr[p].x) > Math.max(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
+                ||  Math.min(bulletArr[i].y, enemyArr[p].y) > Math.max(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size)
+                    )
+                {
+                    enemyArr[i].dead = true;
+                    console.log("SPLAT");
+                }
+            }
         }
     }
 
@@ -143,7 +199,7 @@
             let color = colors[Math.floor(Math.random() * colors.length)];
             //let variant = variants[Math.floor(Math.random() * variants.length)];
             let variant = "spaz";
-            enemyArr.push(new Enemy(10, color, 30, 250, 250, variant));
+            enemyArr.push(new Enemy(1, color, 30, 250, 250, variant));
         }
     }
 
@@ -184,14 +240,7 @@ function vMove(){
 
     // COLLISIONS
     ////////////////////////////////////////////////////////
-    function collision(positionx1, positiony1, velocityx1, velocityy1, positionx2, positiony2, velocityx2, velocityy2)
-    {
-
-    }
-    function collisionEnemyWithWall()
-    {
-
-    }
+    
 
     </script>
 
