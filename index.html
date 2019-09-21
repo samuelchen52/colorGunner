@@ -61,11 +61,11 @@
         py = py + player.sizey > canv.height ? canv.height - player.sizey : py;
         py = py < 0 ? 0 : py;
 
-        ctx.fillStyle="black";
+        ctx.fillStyle="white";
         ctx.fillRect(0,0,canv.width,canv.height);
         
         let size = player.getSize();
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "black";
         ctx.fillRect(px, py, size.sx, size.sy);
         ctx.fillStyle = player.getColor();
         ctx.fillRect(px+2,py+2,size.sx-4, size.sy-4);
@@ -127,8 +127,8 @@
             for (let p = 0; p < enemyArr.length; p ++)
             {
                 if (
-                    Math.min(bulletArr[i].x, enemyArr[p].x) > Math.max(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
-                ||  Math.min(bulletArr[i].y, enemyArr[p].y) > Math.max(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size)
+                    Math.min(bulletArr[i].x, enemyArr[p].x) <= Math.max(bulletArr[i].x + 7, enemyArr[p].x + enemyArr[p].size) 
+                ||  Math.min(bulletArr[i].y, enemyArr[p].y) <= Math.max(bulletArr[i].y + 7, enemyArr[p].y + enemyArr[p].size)
                     )
                 {
                     enemyArr[i].dead = true;
