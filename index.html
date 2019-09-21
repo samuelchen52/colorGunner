@@ -22,7 +22,7 @@
         ctx=canv.getContext("2d");
         document.addEventListener("keydown",keyPush);
         document.addEventListener("keyup", keyUp);
-        canv.addEventListener("click", shoot);
+        canv.addEventListener("mousedown", shoot);
         setInterval(game,1000/15);
     }
 
@@ -67,7 +67,6 @@
             ctx.fillStyle = enemyArr[i].color;
             let move = enemyArr[i].makeMove(px + player.sizex / 2, py + player.sizey / 2);
             ctx.fillRect(move[0], move[1], move[2], move[3]);
-            console.log(move)
             enemyArr[i].move(move[0], move[1]);
         }
 
@@ -76,8 +75,8 @@
             ctx.fillRect(bulletArr[i].currentx, bulletArr[i].currenty, 7, 7);
             ctx.fillStyle = bulletArr[i].getColor();
             ctx.fillRect(bulletArr[i].currentx+1, bulletArr[i].currenty+1, 5, 5);
-            bulletArr[i].currentx+=bulletArr[i].tx;
-            bulletArr[i].currenty+=bulletArr[i].ty;
+            let move = bulletArr[i].makeMove();
+            bulletArr[i].move(move[0],move[1]);
         }
     }
 

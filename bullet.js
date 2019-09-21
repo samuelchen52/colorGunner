@@ -13,4 +13,13 @@ class Bullet {
     getColor(){
         return this.color;
     }
+
+    makeMove(){
+        return [this.currentx+this.tx, this.currenty+this.ty];
+    }
+
+    move(x,y){
+        this.currentx = x;
+        this.currenty = y;
+    }
 }
