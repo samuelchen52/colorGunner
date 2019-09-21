@@ -84,8 +84,8 @@ class Enemy
 		this.color = color;
 		this.size = size;
 		this.variant = variant;
-		this.x = Math.floor(Math.random() * 500);
-		this.y = Math.floor(Math.random() * 500);
+		this.x = positionx
+		this.y = positiony
 		this.dead = false;
 	}
 

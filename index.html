@@ -285,11 +285,15 @@
             //constructor(difficulty, color, size, positionx, positiony, variant)
             let color = colors[Math.floor(Math.random() * colors.length)];
             let variant = variants[Math.floor(Math.random() * variants.length)];
-            enemyArr.push(new Enemy(difficulty, color, 30, 250, 250, variant));
+            let rx = 100 + Math.random() * 300;
+            rx = rx + px > canv.width ? px - rx : rx + px;
+            let ry = 100 + Math.random() * 300;
+            ry = ry + py > canv.height ? py -ry : ry +py;
+            enemyArr.push(new Enemy(difficulty, color, 30, rx, ry, variant));
         }
         if(difficulty <10)
         difficulty++;
-        //document.getElementById("level").innerHTML("Level: "+difficulty);
+        document.getElementById("level").innerHTML ="Level: "+difficulty;
     }
 
     function shoot(evt){
