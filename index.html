@@ -294,7 +294,7 @@
             enemyArr.push(new Enemy(difficulty, color, 30, rx, ry, variant));
         }
         difficulty++;
-        document.getElementById("level").innerHTML ="Level: "+difficulty;
+        document.getElementById("level").innerHTML ="Level: "+(difficulty - 1);
     }
 
     function shoot(evt){
